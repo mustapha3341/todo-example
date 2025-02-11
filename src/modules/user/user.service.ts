@@ -1,45 +1,19 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { SignupDto } from '../authentication/dto/signup.dto';
-import { AuthService } from '../authentication/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    private readonly authService: AuthService,
+    private userRepository: Repository<User>,
   ) {}
 
-  async createUser(dto: SignupDto): Promise<{ message: string }> {
-    const { email, password, phoneNumber } = dto;
-
-    // Check if email already exists
-    const existingUser = await this.userRepository.findOne({
-      where: { email },
-    });
-    if (existingUser) {
-      throw new BadRequestException('Email already registered');
-    }
-
-    // Hash password using AuthService
-    const hashedPassword = await this.authService.hashPassword(password);
-
-    // Create and save new user
-    const newUser = this.userRepository.create({
-      email,
-      password: hashedPassword,
-      phoneNumber,
-    });
-    await this.userRepository.save(newUser);
-
-    return { message: 'User registered successfully' };
+  async createUser(signupDto: SignupDto): Promise<User> {
+    const user = this.userRepository.create(signupDto);
+    return user;
   }
 
   /**

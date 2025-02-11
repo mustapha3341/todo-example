@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 import { UserModule } from './modules/user/user.module';
 import { TodoModule } from './modules/todo/todo.module';
@@ -13,6 +14,7 @@ import { Todo } from './modules/todo/entities/todo.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    JwtModule.register({ global: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST || 'localhost',
