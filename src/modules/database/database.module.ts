@@ -12,7 +12,7 @@ import { getEnv } from 'src/shared/helpers/env.helper';
         if (env.isDevelopment()) {
           return {
             type: 'mysql',
-            host: 'database',
+            host: 'ql3.freesqldatabase.com',
             port: env.DB_PORT,
             username: env.DB_USERNAME,
             password: env.DB_PASSWORD,
